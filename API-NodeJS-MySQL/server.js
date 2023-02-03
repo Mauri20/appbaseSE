@@ -4,6 +4,8 @@
 const express = require("express");
 const mysql = require("mysql2");
 const myconn = require("express-myconnection");
+// importing cors
+const cors = require("cors");
 
 // importing routes
 const routes = require("./routes");
@@ -25,8 +27,10 @@ const dbOptions = {
 app.use(myconn(mysql, dbOptions, "single"));
 
 // Middlewares
+app.use(cors());
 app.use(express.json());
 app.use("/api", routes);
+// using cors
 
 // routes
 // main page route

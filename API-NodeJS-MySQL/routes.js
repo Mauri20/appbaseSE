@@ -32,7 +32,7 @@ router.get("/answers", (req, res) => {
 });
 
 // get answer of question route
-router.get("/getanswer", (req, res) => {
+router.post("/getanswer", (req, res) => {
   req.getConnection((err, conn) => {
     if (err) return res.send(err);
     conn.query("call sp_getAnswerQ(?);", [req.body.question], (err, rows) => {
