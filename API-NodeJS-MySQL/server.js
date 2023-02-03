@@ -5,13 +5,16 @@ const express = require("express");
 const mysql = require("mysql2");
 const myconn = require("express-myconnection");
 
+// importing routes
+const routes = require("./routes");
+
 // creating an express app
 const app = express();
-const port = 3000;
+const port = 5000;
 
 //creating a connection to the database
 const dbOptions = {
-  host: "@localhost",
+  host: "localhost",
   port: 3306,
   user: "root",
   password: "root",
@@ -21,16 +24,17 @@ const dbOptions = {
 // using the connection
 app.use(myconn(mysql, dbOptions, "single"));
 
-// using the express json middleware
+// Middlewares
 app.use(express.json());
+app.use("/api", routes);
 
 // routes
-// creating a GET route
+// main page route
 app.get("/", (req, res) => {
-  res.send("This is the API page!");
+  res.send("This is Main page!");
 });
 
 // starting the server
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
+  console.log(`App listening at http://localhost:${port}`);
 });
