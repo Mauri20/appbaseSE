@@ -53,5 +53,24 @@ router.get("/getanswersQ", (req, res) => {
   });
 });
 
+//adding a new answer route to save in the database
+router.post("/newanswer", (req, res) => {
+  req.getConnection((err, conn) => {
+    if (err) return res.send(err);
+    conn.query(
+      "call sp_addAnswer(?,?);",
+      [req.body.question, req.body.answer],
+      (err, rows) => { 
+        if (rows.affectedRows === 1 ){
+          res.status(200).json({ message: "Answer added!" });
+        } else {
+          res.status(500).json({ message: "Answer not add!" });
+        }
+      }
+      
+      );
+  });
+});
+
 //exporting the router
 module.exports = router;

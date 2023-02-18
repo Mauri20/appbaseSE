@@ -1,5 +1,6 @@
 // importing bootstrap components
 import { Container, Row, Col, Form, Button, Card } from "react-bootstrap";
+import Swl from "sweetalert2";
 import { useState } from "react";
 
 export const QuestionCRUD = () => {
@@ -23,9 +24,55 @@ export const QuestionCRUD = () => {
       });
       const data = await response.json();
       console.log(data);
+      if (data.length === 0) {
+        setAnswer("")
+        Swl.fire({
+          title: "Sorry!",
+          text: "We don't have an answer for that question",
+          icon: "error",
+          confirmButtonText: "do you want to add an answer?",
+        }).then( (result) => {
+          if (result.isConfirmed) {
+            //adding a form to add a new answer
+            Swl.fire({
+              title: "Write your answer",
+              input: "textarea",
+              inputAttributes: {
+                autocapitalize: "off",
+              },
+              showCancelButton: true,
+              confirmButtonText: "Submit",
+              showLoaderOnConfirm: true,
+              preConfirm: async (answer) => {
+                // creating a new answer
+                const url = "http://localhost:5000/api/newanswer";
+                const response = await fetch(url, {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({ question, answer }),
+                });
+                return response;
+             
+              },
+            }).then((result) => {
+              
+              if (result.isConfirmed) {
+                Swl.fire("Answer Added!", "", "success");
+                setAnswer("")
+              }else if(result.isDismissed){
+                Swl.fire("Answer not added!", "", "error");
+                setAnswer("")
+              }
+            });
+          } 
 
-      setAnswer(data[Math.floor(Math.random() * data.length)].Respuesta);
-
+        });
+      }
+      else {
+        setAnswer(data[Math.floor(Math.random() * data.length)].Respuesta);
+      }
       setQuestion("");
     }
   }
