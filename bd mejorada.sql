@@ -28,7 +28,7 @@ CREATE TABLE `answers` (
   `idAnswer` int NOT NULL AUTO_INCREMENT,
   `answer` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`idAnswer`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -37,7 +37,7 @@ CREATE TABLE `answers` (
 
 LOCK TABLES `answers` WRITE;
 /*!40000 ALTER TABLE `answers` DISABLE KEYS */;
-INSERT INTO `answers` VALUES (1,'hola'),(2,'estoy muy bien'),(3,'a las 4 pm termina la clase'),(4,'tengo 20 años'),(5,'mucho gusto');
+INSERT INTO `answers` VALUES (1,'hola'),(2,'estoy muy bien'),(3,'a las 4 pm termina la clase'),(4,'tengo 20 años'),(5,'mucho gusto'),(6,'mi nombre es chatbot UNAB');
 /*!40000 ALTER TABLE `answers` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -57,7 +57,7 @@ CREATE TABLE `questiondetail` (
   KEY `fk_answer_question_idx` (`idAnswer`),
   CONSTRAINT `fk_answer_question` FOREIGN KEY (`idAnswer`) REFERENCES `answers` (`idAnswer`),
   CONSTRAINT `fk_question_answer` FOREIGN KEY (`idQuestion`) REFERENCES `questions` (`idQuestion`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -66,7 +66,7 @@ CREATE TABLE `questiondetail` (
 
 LOCK TABLES `questiondetail` WRITE;
 /*!40000 ALTER TABLE `questiondetail` DISABLE KEYS */;
-INSERT INTO `questiondetail` VALUES (1,1,1),(2,2,2),(3,3,3),(4,4,4),(5,5,5);
+INSERT INTO `questiondetail` VALUES (1,1,1),(2,2,2),(3,3,3),(4,4,4),(5,5,5),(6,7,6);
 /*!40000 ALTER TABLE `questiondetail` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -81,7 +81,7 @@ CREATE TABLE `questions` (
   `idQuestion` int NOT NULL AUTO_INCREMENT,
   `question` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`idQuestion`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -90,13 +90,41 @@ CREATE TABLE `questions` (
 
 LOCK TABLES `questions` WRITE;
 /*!40000 ALTER TABLE `questions` DISABLE KEYS */;
-INSERT INTO `questions` VALUES (1,'hola'),(2,'como estas'),(3,'a que hora nos vamos'),(4,'que edad tienes'),(5,'hola soy Carlos');
+INSERT INTO `questions` VALUES (1,'hola'),(2,'como estas'),(3,'a que hora nos vamos'),(4,'que edad tienes'),(5,'hola soy Carlos'),(6,'quien eres?'),(7,'Como te llamas?');
 /*!40000 ALTER TABLE `questions` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
 -- Dumping routines for database 'test'
 --
+/*!50003 DROP PROCEDURE IF EXISTS `sp_addAnswer` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_addAnswer`(
+ pQuestion varchar(100),
+ pAnswer varchar(100)
+)
+BEGIN
+declare questionId integer;
+declare answerId integer;
+insert into questions (question) values (pQuestion);
+set questionId = last_insert_id();
+insert into answers (answer) values (pAnswer);
+set answerId = last_insert_id();
+insert into questiondetail (idQuestion, idAnswer) values (questionID, answerId);
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `sp_getAllAnswerQ` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -207,4 +235,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-02-03 13:30:54
+-- Dump completed on 2023-02-18 15:20:56

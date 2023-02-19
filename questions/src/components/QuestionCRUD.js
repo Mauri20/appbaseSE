@@ -25,13 +25,13 @@ export const QuestionCRUD = () => {
       const data = await response.json();
       console.log(data);
       if (data.length === 0) {
-        setAnswer("")
+        setAnswer("");
         Swl.fire({
           title: "Sorry!",
           text: "We don't have an answer for that question",
           icon: "error",
-          confirmButtonText: "do you want to add an answer?",
-        }).then( (result) => {
+          confirmButtonText: "Do you want to add an answer?",
+        }).then((result) => {
           if (result.isConfirmed) {
             //adding a form to add a new answer
             Swl.fire({
@@ -54,23 +54,19 @@ export const QuestionCRUD = () => {
                   body: JSON.stringify({ question, answer }),
                 });
                 return response;
-             
               },
             }).then((result) => {
-              
               if (result.isConfirmed) {
                 Swl.fire("Answer Added!", "", "success");
-                setAnswer("")
-              }else if(result.isDismissed){
+                setAnswer("");
+              } else if (result.isDismissed) {
                 Swl.fire("Answer not added!", "", "error");
-                setAnswer("")
+                setAnswer("");
               }
             });
-          } 
-
+          }
         });
-      }
-      else {
+      } else {
         setAnswer(data[Math.floor(Math.random() * data.length)].Respuesta);
       }
       setQuestion("");
